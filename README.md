@@ -1,6 +1,6 @@
 # WebAssembly
-let C/C++ to run in the browser
-
+let C/C++ to run in the browser    
+简书优质文章 https://www.jianshu.com/p/bff8aa23fe4d    
 
 ## 深入浅出 WebAssembly 观书有感 & 学习笔记
 
