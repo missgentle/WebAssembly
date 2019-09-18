@@ -72,7 +72,7 @@ JS本身是一种弱类型(Weak Typed)的编程语言。所谓弱类型，在语
 
 - Chrome V8 引擎链路 **P17+P22**
 
-<img src='img/wasm-1.png'>    
+<img src='wasm-1.png'>    
 
 老版本的Chrome V8(Chrome 58以下)，整个代码的解析，编译和执行过程流程，可以分为两个阶段：Baseline编译阶段和Optimized编译阶段。Baseline编译阶段由“Full-codegen”基线JIT编译器处理，Optimized编译阶段由“Crankshaft”和“TurboFan”两个优化JIT编译器处理。每一组编译器都有一个前置的语法分析器，对JS源码进行词法和语法分析，同时生成对应的AST数据结构。    
 
