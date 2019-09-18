@@ -2,7 +2,7 @@
 let C/C++ to run in the browser    
 简书优质文章 https://www.jianshu.com/p/bff8aa23fe4d    
 
-<img src='img/cover.png' width='100%'>
+<img src='img/cover.png' width='100%' height='80px'>
 
 ## 深入浅出 WebAssembly 观书有感 & 学习笔记
 
