@@ -110,9 +110,13 @@ Full-codegen基线编译器把编译流程交给优化编译器进行优化处�
   - V8的编译器链路在解析和执行JS代码的整个时间线(Startup Time)上，有近三分之一的时间被Paring和Compiling占据。
   - 对同一段代码的多次Pasing大大降低了V8的处理效率(Pre-Parsing,基线编译器的Full-Parsing,优化编译器的Full-Parsing)。    
   
-V8也提供了一些比较“Hack”的方式来避免多余的Pre-parsing过程——IIFE(立即执行函数表达式)形式的代码。强制让V8省略对IIFE内部代码的Pre-parsing过程。
+V8也提供了一些比较“Hack”的方式来避免多余的Pre-parsing过程——IIFE(立即执行函数表达式)形式的代码(の其实好像就是字面量函数吧)。强制让V8省略对IIFE内部代码的Pre-parsing过程。
 
+- 全新的V8引擎编译器链路 **P27**    
 
+<img src='img/wasm-2.png'>  
+
+鉴于老版本V8存在的问题，Google自Chrome58版本开始，对V8引擎的编译器链路进行了改进和优化。如上图，在V8团队**所！希！望！的**全新的V8引擎的编译器链路里，新加入了一个名为“Ignition”的解释器，同时去掉了Full-codegen基线编译器和Crankshaft优化编译器。
 
 
 
