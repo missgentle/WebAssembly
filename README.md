@@ -181,6 +181,8 @@ NaCl全称“Google Native Client”，是谷歌Chrome开发团队与2011年8月
 
 当浏览器解析到用于加载NaCl模块的HTML标签时(embed标签，指定插件类型“application/x-nacl”，src属性指定.nmf描述文件),会根据当前计算机的处理器架构自动从Manifest文件中找到对应的会根据当前计算机的处理器架构自动从Manifest文件中模块所在的远程位置，并通过HTTP请求来加载这个模块。随后浏览器的NaCl Helper的进程(Native Client Process)会对该NaCl模块进行处理。    
 
+<img src='img/wasm-4.png'>  
+
 首先使用SFI技术对模块进行安全检查，检查内容主要包括该模块是否读写了处于非安全区的内存数据段，是否调用了受限制的API等。若检查失败，则该NaCl模块会被拒绝加载和运行；否则，该模块会被直接加载到沙盒环境中运行NaCl Helper会与该模块进行连接，模块随后便可以通过NaCl Helper与浏览器进行通信和交互。    
 
 由于NaCl模块的平台独立性，在实际项目中使用时，NaCl应用在被部署到Web浏览器之前，需要为每种不同的处理器架构分别单独编译对应版本的NaCl模块文件，这导致NaCl应用在互联网上无法被自由分发。这种方式既不方便也不符合开源软件的便携特性。此外，由于NaCl模块本身不具有可移植性，Chrome官方规定只能将NaCl模块发布到Chrome网上商店。于是基于NaCl发展出了PNaCl。    
@@ -189,7 +191,7 @@ NaCl全称“Google Native Client”，是谷歌Chrome开发团队与2011年8月
 
 PNaCl全称“Google Portable Native Client”。如图，相较于NaCl，它并不会直接将应用的C/C++源码编译成依赖于特定处理器架构的的底层机器码，整个PNaCl应用的创建和运行分为两步：    
 
-<img src='img/wasm-4.png'>  
+<img src='img/wasm-5.png'>  
 
 1.PNaCl会将C/C++源码编译成一种基于LLVM生成的具有抽象中间比特码格式的模块(常以.pexe为后缀)，这种模块不依赖于具体处理器架构，因此可以在网络上随意分发。    
 
