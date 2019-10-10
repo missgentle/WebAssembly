@@ -4,7 +4,7 @@ let C/C++ to run in the browser
 几张图让你看懂WebAssembly https://www.jianshu.com/p/bff8aa23fe4d    
 深入浅出让你理解什么是LLVM https://www.jianshu.com/p/1367dad95445    
 
-<img src='img/logo.png'>
+<img src='img/wasm.png'>
 
 ## 深入浅出 WebAssembly 观书有感 & 学习笔记
 
