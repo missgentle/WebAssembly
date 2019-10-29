@@ -296,7 +296,7 @@ extern "C"{...}语句块可以让编译器以C语言的规则来处理位于其�
 
 当使用C++编译器编译一段C++源码时，编译器会在当前环境中自动生成一个名为“_cplusplus”的默认宏变量。因此，我们可以通过判断该宏变量是否存在来检查当前正在编译器是否是C++编译器。而该宏变量的具体值基本对应着C++各版本标准的正式发布日期或通过C++标准委员会最后审批的日期。    
 
-因此当我们希望在C++编译器中以C语言的规则来处理代码是，可使用以下形式的条件编译：    
+因此当我们希望在C++编译器中以C语言的规则来处理代码时，可使用以下形式的条件编译：    
 ```
 #ifdef _cplusplus
 extern "C"{
@@ -311,7 +311,8 @@ extern "C"{
 
 - EMSCRIPTEN_KEEPALIVE **P69-P74**    
 
-EMSCRIPTEN_KEEPALIVE是Emscripten工具链提供的一个宏，用于防止C++编译器在处理和优化C++代码时进行DCE处理(Dead Code Elimination,编译器在比较深度的优化时，会分析源码中对程序最终运行结果没有影响的逻辑过程，借由DCE策略移除这部分代码，从而提高效率减小体积)。    
+EMSCRIPTEN_KEEPALIVE是Emscripten工具链提供的一个宏(使用时需要#include <emscripten.h>)，用于防止C++编译器在处理和优化C++代码时进行DCE处理(Dead Code Elimination,编译器在比较深度的优化时，会分析源码中对程序最终运行结果没有影响的逻辑过程，借由DCE策略移除这部分代码，从而提高效率减小体积)。
+实际上Emscripten直接将该宏参数定义成了“_attribute_((used))”这个编译器描述符，被“_attribute_((used))”标识的函数定义会被编译器强制保留。即在emscripten.h中定义了`#define EMSCRIPTEN_KEEPALIVE _attribute_((used))`
 
 通常，Wasm模块对应的C++源码中不包含main入口函数，因此需要通过EMSCRIPTEN_KEEPALIVE来标记要导出到JS环境中的方法，防止其在编译过程中被DCE。举例如下：    
 
