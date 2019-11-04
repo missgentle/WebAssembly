@@ -22,7 +22,7 @@
     `python -m SimpleHTTPServer 8081`    
     访问：http://127.0.0.1:8081/index-optimizer.html    
 
-     http://127.0.0.1:8080/ux/index-optimizer.html    
+     wildfly部署：http://127.0.0.1:8080/ux/index-optimizer.html    
 
     2 编译成动态库的方式(Dynamic Library) ------ ！失败！    
     `emcc emscripten-standalone.cc -s WASM=1 -s SIDE_MODULE=1 -o emscripten-standalone-dynamic.wasm`    
@@ -39,6 +39,5 @@
   - Dependent类型    
   `emcc emscripten-dependent.cc -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=[ccall] --post-js post-script.js -o emscripten-dependent.js`    
 
-   http://127.0.0.1:8080/ux/index-dependent.html    
 
 
