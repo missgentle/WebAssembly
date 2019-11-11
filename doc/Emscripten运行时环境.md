@@ -96,8 +96,8 @@ void one_iter_render () {
 - __ATPRERUN__ 应用开始运行前执行，这里一般进行虚拟文件系统初始化    
 - __ATINIT__ Emscripten运行时环境开始初始化时    
 - __ATMAIN__ C/C++源代码中的主函数被调用前    
-- __ATEXIT__ 整个应用/ERE退出时执行，这里可对之前分配的系统内存资源进行回收    
 - __ATPOSTRUN__ 当对应C/C++源代码中主函数的代码逻辑执行完毕后    
+- __ATEXIT__ 整个应用/ERE退出时执行，这里可对之前分配的系统内存资源进行回收    
 ```    
 
 相应的，Emscripten也提供了一些可以应用在C/C++源代码中的生命周期函数，用于辅助模拟浏览器主循环流程(3个)，并对该流程进行控制(常用的4个)。    
@@ -121,11 +121,7 @@ void one_iter_render () {
 - emscripten_force_exit()：停止并强制退出当前wasm应用    
 
 - emscripten_set_main_loop_expected_blockers()：用于向ERE报告预处理函数(emscripten_push_main_loop_blocker)的个数。
-我们可以通过JS运行时环境提供的Module.setStatue回调函数，来实时检测位于执行队列中的预处理函数的总体完成进度，并同步的反馈给用户。    
-
-```
-
-```    
+我们可以通过JS运行时环境提供的Module.setStatus回调函数，来实时检测位于执行队列中的预处理函数的总体完成进度，并同步的反馈给用户。    
 
 更多与浏览器运行环境相关的函数，可查看源码：emsdk\fastcomp\emscripten\system\include\emscripten\emscripten.h，并在官网了解具体使用方法。    
 
