@@ -51,7 +51,38 @@ SDL是一套跨平台的软件开发库，通过它我们可以直接访问计�
 
 ### 浏览器主循环    
 
+Web内的事件模型使用了“协同多任务”处理机制，即每个事件每次只能在一个等长的时间片内运行，在该时间片结束后必须将控制权返回给浏览器，以便其他事件继续执行。通常导致html页面无响应的一个常见原因就是对应于当前事件的JS脚本没有及时退出并将控制权返回给浏览器，比如死循环或函数无限递归调用。    
 
+而传统的C/C++图形应用通常会以无限循环的方式来执行一段代码(通常为渲染函数，比如GLUT中的glutMainLoop)，在这段代码中，应用程序分别负责处理事件，图形的计算和渲染，整个过程会通过添加延迟的方式来确保每一帧所花费的时间一致。但这种无限循环的代码执行方式无法直接用于浏览器环境，因为控制权无法在时间片内返回给浏览器，浏览器将通知用户页面无响应并停止提供服务。    
+
+在浏览器环境中像WebGL这样的JS API 也只能在浏览器时间片结束时被执行，且在这些API内部会自动渲染和交换当前视图缓冲区的内容。这与基于OpenGL构建C/C++应用程序则正好相反，这里需要手动交换缓冲区的内容，以实现屏幕视图中显示内容的更新。Emscripten对这个问题的处理方案则是专门定义一个C/C++函数来代替图像处理代码中的无限循环过程：    
+
+```
+int main (int argc, char **argc) {
+	...
+	// 利用“__EMSCRIPTEN__”宏来区分编译环境
+	#ifdef __EMSCRIPTEN__
+	// void emscripten_set_main_loop(em_callback_func func, int fps, int simulate_infinite_loop);
+	// 在C/C++中模拟浏览器主循环，实际会编译成setTimeout + requestAnimationFrame实现
+	
+	// 以每秒60次饿频率调用one_iter_render(),两次执行之间执行其他浏览器事件代码
+	emscripten_set_main_loop(one_iter_render, 60, 1);
+
+	#else
+	while (1) {
+		one_iter_render();
+		// 延迟绘制，使帧率稳定
+		SDL_Delay(time_to_next_frame());
+	}
+	#endif
+}
+
+// 用于无限循环/主循环绘制函数
+void one_iter_render () {
+	//处理数据
+	//绘制视图
+}
+```    
 
 ### 执行生命周期    
 
