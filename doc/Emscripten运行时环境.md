@@ -118,7 +118,8 @@ void one_iter_render () {
 
 - emscripten_resume_main_loop()：恢复浏览器主循环    
 
-- emscripten_force_exit()：停止并强制退出当前wasm应用    
+- emscripten_force_exit()：停止并强制退出当前wasm应用。函数调用后会直接触发当前JS运行时环境中的“__ATEXIT__”钩子队列。
+若要在C/C++源代码中使用该函数，则需要在编译时为emcc指定参数“NO_NXIT_RUNTIME=0”，以允许Emscripten运行时环境退出。    
 
 - emscripten_set_main_loop_expected_blockers()：用于向ERE报告预处理函数(emscripten_push_main_loop_blocker)的个数。
 我们可以通过JS运行时环境提供的Module.setStatus回调函数，来实时检测位于执行队列中的预处理函数的总体完成进度，并同步的反馈给用户。    
