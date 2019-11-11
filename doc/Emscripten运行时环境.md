@@ -86,7 +86,48 @@ void one_iter_render () {
 
 ### 执行生命周期    
 
+基于Emscripten工具链构建的Wasm应用其生命周期中各关键节点的基本执行顺序如图    
 
+<img src='img/wasm-8.png'>    
+
+左侧一列以“__”开头和结尾的标识符为Emscripten在JS运行时环境中提供的5种钩子队列数组，可在应用对应的JS代码中直接调用。    
+
+```
+- __ATPRERUN__ 应用开始运行前执行，这里一般进行虚拟文件系统初始化    
+- __ATINIT__ Emscripten运行时环境开始初始化时    
+- __ATMAIN__ C/C++源代码中的主函数被调用前    
+- __ATEXIT__ 整个应用/ERE退出时执行，这里可对之前分配的系统内存资源进行回收    
+- __ATPOSTRUN__ 当对应C/C++源代码中主函数的代码逻辑执行完毕后    
+```    
+
+相应的，Emscripten也提供了一些可以应用在C/C++源代码中的生命周期函数，用于辅助模拟浏览器主循环流程(3个)，并对该流程进行控制(常用的4个)。    
+
+- emscripten_set_main_loop()    
+
+在C/C++源代码中模拟浏览器主循环的主要函数，实际Emscripten在编译时会直接转换为JS环境下对应的setTimeout和requestAnimationFrame    
+
+- emscripten_push_main_loop_blocker()    
+
+在emscripten_set_main_loop()运行前为其添加相应的预处理。比如进入游戏主流程前预先加载贴图，音视频等多媒体资源。该函数会阻塞主循环函数。    
+
+- emscripten_async_call()    
+
+用于在C/C++源代码中异步执行一段代码。不会被任何方法阻塞。可用它来执行任何需要在特定时间段后立即运行的任务。    
+
+- emscripten_pause_main_loop()：暂停浏览器主循环    
+
+- emscripten_resume_main_loop()：恢复浏览器主循环    
+
+- emscripten_force_exit()：停止并强制退出当前wasm应用    
+
+- emscripten_set_main_loop_expected_blockers()：用于向ERE报告预处理函数(emscripten_push_main_loop_blocker)的个数。
+我们可以通过JS运行时环境提供的Module.setStatue回调函数，来实时检测位于执行队列中的预处理函数的总体完成进度，并同步的反馈给用户。    
+
+```
+
+```    
+
+更多与浏览器运行环境相关的函数，可查看源码：emsdk\fastcomp\emscripten\system\include\emscripten\emscripten.h，并在官网了解具体使用方法。    
 
 ### Emscripten内存表示    
 
