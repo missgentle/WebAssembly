@@ -5,4 +5,4 @@
   `emcc em_js.cc -s WASM=1 -o em_js.html`
 
 - EM_ASM / EM_ASM_ / EM_ASM_INT / EM_ASM_DOUBLE     
-    `emcc cc/em_asm.cc -s WASM=1 -o out/em_asm.html`    
+    `emcc em_asm.cc -s WASM=1 -o em_asm.html`    
