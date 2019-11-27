@@ -1,4 +1,4 @@
-> 本文档涉及的所有源代码均摘录于书籍：《深入浅出WebAssembly》，位于 runJSinC/和runCinJS/ 下    
+> 本文档涉及的所有源代码均摘录自书籍：《深入浅出WebAssembly》，位于 runJSinC/和runCinJS/ 下    
 
 ## 在JS代码中调用C/C++函数(runCinJS)    
 
