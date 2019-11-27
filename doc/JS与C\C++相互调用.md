@@ -5,7 +5,7 @@
 - Module.ccall(直接调用)    
   `emcc cc/cfunc.cc --std=c++11 -o out/ccall.html -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=[ccall,getValue] --post-js js/post-script-ccall.js`
 
-  - Module.cwrap(包装函数-除number类型外实际也调用了ccall)    
+- Module.cwrap(包装函数-除number类型外实际也调用了ccall)    
   `emcc cc/cfunc.cc --std=c++11 -o out/cwrap.html -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap','getValue'] --post-js js/post-script-cwrap.js`
    
 
@@ -16,10 +16,8 @@
 - emscripten_run_script()    
     `emcc cc/c_run_script.cc -s WASM=1 -o out/c_run_script.html`    
 
-
 - EM_JS()    
     `emcc cc/em_js.cc -s WASM=1 -o out/em_js.html`
-
 
 - EM_ASM / EM_ASM_ / EM_ASM_INT / EM_ASM_DOUBLE     
     `emcc cc/em_asm.cc -s WASM=1 -o out/em_asm.html`
