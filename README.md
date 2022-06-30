@@ -256,7 +256,7 @@ Wasm模块可以通过JS提供的上层Web API来调用浏览器本身的功能�
 
 Wasm在其标准中提到，我们可以使用任意的静态强类型编程语言来编写一个Wasm模块，但由于Wasm规范刚刚标准化，可用的LLVM编译器前端并不多，因此主要还是使用C/C++语言来编写模块所对应的源代码。    
 
-> 了解JS引擎IC(Inline Cache “内联缓存”)技术: https://www.infoq.cn/article/6xoszzPr1884E70slu9K    
+> 了解JS引擎IC(Inline Cache “内联缓存”)技术: https://mp.weixin.qq.com/s/mbJJAiGz0OAd2IOc8K5Mkg    
 > 了解OSR(On Stack Replacement)技术: https://www.zhihu.com/question/45910849    
 > 想了解什么是LLVM可以阅读开篇推荐的简书文章: https://www.jianshu.com/p/1367dad95445    
 > 后面会围绕一个具体的例子讲解一些Wasm模块的相关细节(源码在fib/和quicksort/下)。    
