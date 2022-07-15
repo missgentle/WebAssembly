@@ -1,4 +1,4 @@
-## Emscripten的安装使用教程（Windows 10 专业版）    
+## Emscripten使用2022（ Windows 10 专业版）    
 
 > 声明在先：本文参考掘金好文 https://juejin.im/entry/5bcd43a5e51d457a502a7554    
 > 代码示例摘自书籍《深入浅出WebAssembly》(于航/著)第五章    
