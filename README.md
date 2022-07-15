@@ -334,6 +334,8 @@ int EMSCRIPTEN_KEEPALIVE add(int a, int b){
 
 > 到此，第一章的内容结束。对Wasm的背景，基本原理应该已经有所了解。    
 > 鉴于篇幅过长，之后的内容会整理到doc目录下。接下来直接跳到第五章，先来一篇Emscripten的安装使用教程，等我踩坑归来吧( •̀ ω •́ )y      
-> Emscripten的安装使用教程去这里: https://github.com/missgentle/Q-A/tree/master/Guide/Emscripten
+> Emscripten的安装使用教程去这里    
+> 2022版: https://github.com/missgentle/WebAssembly/blob/master/doc/Emscripten%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A82022.md    
+> 2019版: https://github.com/missgentle/Q-A/tree/master/Guide/Emscripten    
 
 
