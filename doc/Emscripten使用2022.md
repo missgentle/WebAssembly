@@ -1,4 +1,4 @@
-## Emscripten使用2022（ Windows 10 专业版）    
+## Emscripten使用2022（Windows版）    
 
 > 声明在先：本文参考掘金好文 https://juejin.im/entry/5bcd43a5e51d457a502a7554    
 > 代码示例摘自书籍《深入浅出WebAssembly》(于航/著)第五章    
@@ -159,12 +159,12 @@ Emscripten无法将涉及浏览器层API的C/C++源程序(如使用了OpenGL技�
   构建Standalone类型的Wasm应用有两种方式：
   
    1 使用增强型优化器的方式(Optimizer)    
-    `emcc cc/emscripten-standalone.cc -Os -s WASM=1 -o out/emscripten-standalone-optimizer.wasm`    
+    `emcc --no-entry cc/emscripten-standalone.cc -Os -s WASM=1 -o out/emscripten-standalone-optimizer.wasm`    
     
-   其中-Os参数是优化的关键，该参数告知编译器以“第4等级”的优化策略优化目标代码，进而删除其中没有被用到并且与ERE(Emscripten Runtime Environment, Emscripten运行时环境)相关的所有信息。但这种方式可能并不适用于功能较为复杂或使用了C++11及以上版本语法特性的Wasm应用。WASM=1标识用于设置编译器生成目标文件类型为wasm二进制模块。    
+   其中，-Os参数是优化的关键，该参数告知编译器以“第4等级”的优化策略优化目标代码，进而删除其中没有被用到并且与ERE(Emscripten Runtime Environment, Emscripten运行时环境)相关的所有信息。但这种方式可能并不适用于功能较为复杂或使用了C++11及以上版本语法特性的Wasm应用。WASM=1标识用于设置编译器生成目标文件类型为wasm二进制模块。如果您告诉emcc只输出一个wasm文件，则 -s STANDALONE_WASM标志将自动打开，要在STANDALONE_WASM模式下构建而不使用main()，使用emcc --no-entry。    
     
-  <img src='img/emsdk-null.png'>    
-  <img src='img/emsdk-null.png'>    
+  <img src='img/emsdk-10.png'>    
+  <img src='img/emsdk-11.png'>    
   
    接下来，给出HTML与JS脚本代码index-optimizer.html(E:\ wasm-test\html目录下)：：    
    ```
@@ -183,7 +183,7 @@ Emscripten无法将涉及浏览器层API的C/C++源程序(如使用了OpenGL技�
          WebAssembly.instantiate(bytes, {})
        ).then(result => {
          // 从exports对象中获取模块对外暴露出的add方法
-         const exportFuncAdd = result.instance.exports['_add'];
+         const exportFuncAdd = result.instance.exports['add'];
          // 调用add方法
          console.log(exportFuncAdd(10, 20));
        })
@@ -192,15 +192,16 @@ Emscripten无法将涉及浏览器层API的C/C++源程序(如使用了OpenGL技�
    </html>
    ```    
     
-   注意，在Name Mangling特性不生效的情况下，Emscripten会给导出的函数的函数名前加上下划线做前缀，因此从exports对象中获取导出函数时需要使用“_add”.    
+   注意，在Name Mangling特性不生效的情况下，旧版Emscripten会给导出的函数的函数名前加上下划线做前缀，因此从exports对象中获取导出函数时需要使用“_add”，现在不需要了。    
 
    访问 http://127.0.0.1:8081/html/index-optimizer.html    
 	
-   <img src='img/emsdk-null.png'>    
+   <img src='img/emsdk-12.png'>    
    
    2 编译成动态库的方式(Dynamic Library)    
     `emcc cc/emscripten-standalone.cc -s WASM=1 -s SIDE_MODULE=1 -o out/emscripten-standalone-dynamic.wasm`    
     编译命令添加SIDE_MODULE=1标识让Emscripten将C/C++源代码文件编译成一个WebAssembly动态链接库。    
+    动态库有一个正式的定义，并且被设计成以标准的方式可加载。它们也不会在libc等系统库中进行链接。由于这些原因，它们在某些情况下可能是有用的，但动态库也有缺点，比如对内存和函数指针进行重定位，这会增加不必要的开销，如果您只使用一个模块(而没有将几个模块链接在一起)，所以总体上不建议使用它们。    
   
    这里再添加一个index-dynamic.html：    
    
