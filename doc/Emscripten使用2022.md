@@ -1,8 +1,12 @@
 ## Emscripten使用2022（Windows版）    
 
 > 声明在先：本文参考掘金好文 https://juejin.im/entry/5bcd43a5e51d457a502a7554    
+> Github https://github.com/emscripten-core/emscripten/wiki/WebAssembly-Standalone    
+> MDN https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly    
 > 代码示例摘自书籍《深入浅出WebAssembly》(于航/著)第五章    
+> 
 > 旧版2019教程在这里https://github.com/missgentle/Q-A/tree/master/Guide/Emscripten    
+> 
 > Emscripten工具链是作为一个独立的Emscripten SDK分发的。SDK提供了所有必需的工具，如Clang、Python和Node.js，以及一个更新机制，允许在发布时迁移到新的Emscripten版本。    
 
 ### 1.安装Python并配置环境变量    
@@ -78,8 +82,6 @@ return 0;
 <img src='img/emsdk-4.png'>    
 
 因为我没有安装gcc编译工具，也可能是你安装了装了visual studio，或者wsl（windows下Linux子系统），vscode会优先用前两者的编译器，如果前两个都没检测到，vscode才会使用mingw。而巧的是，万能头文件是mingw里才有的，可以自行百度搞一下，但我们用emscripten的emcc编译这里不需要管它。    
-
-
 
 
 - 初始化环境变量再回到工作目录(如果本次命令窗口中已经进行过或做了全局化则略过此步骤)    
@@ -284,7 +286,7 @@ __ATPOSTRUN__.push(() => {
 	//调用模块中暴露出的echo方法
 	Module.ccall('echo', null, ['number'], [10]);
 	//也可以这样调用
-	Module['asm']['_echo'](10);
+	Module['asm']['echo'](10);
 })
 ```    
 由于Emscripten会自动生成用于连接模块与浏览器的JS脚本，因此，我们不需要考虑应该如何加载模块，以及如何为模块提供初始化数据。只需要编写模块初始化后需要执行的主流程代码即可。    
@@ -305,7 +307,14 @@ var __ATPOSTRUN__  = [] // functions called after the runtime has exited
 EXPORTED_RUNTIME_METHODS 标识以数组形式记录所有需要被导出的Emscripten运行时方法，以便Emscripten能够将这些方法的定义直接绑定到全局的Module对象中。    
 --post-js参数用于指定需要被追加到“胶水”脚本文件的JS代码，将被拼接到“胶水文件的尾部”；使用--pre-js编译参数可添加需要在Module对象初始化前执行的JS代码，即追加到脚本文件的头部。    
 
-<img src='img/emsdk-null.png'>    
+<img src='img/emsdk-13.png'>    
+	
+这里windows环境下会遇到报错，原因是在python中默认的编码方式是 “ gbk ”，而Windows中的文件默认的编码方式是 “ utf-8 ” ，所以导致python编译器无法成功读写文件内容。    
+具体分析看这里 https://blog.csdn.net/weixin_46709219/article/details/112060945    
+我这里使用的解决方法是在vscode中将post-script-dependent.js文件编码改为GBK，再emcc就没问题了。    
+
+<img src='img/emsdk-14.png'>    
+<img src='img/emsdk-15.png'>    
 
 最后，通过html文件整合wasm模块index-dependent.html ：    
 
@@ -341,7 +350,11 @@ EXPORTED_RUNTIME_METHODS 标识以数组形式记录所有需要被导出的Emsc
 
 “胶水”脚本文件中的代码在执行时会自动检测当前全局作用域是否存在名为Module的JS对象，以及该对象的wasmBinary属性是否包含一段有效的wasm模块二进制数据。    
 若一切正常，则脚本文件会自动完成ERE初始化，模块加载和实例化等过程，并在相应时期依次执行各钩子队列中的方法。    
+	
+访问 http://127.0.0.1:8081/html/index-dependent.html    
 
-<img src='img/emsdk-null.png'>    
+<img src='img/emsdk-16.png'>    
 
 想深入了解wasm编译流程的可以啃啃源码：`emsdk\fastcomp\emscripten\tools\shared.py`    
+	
+
