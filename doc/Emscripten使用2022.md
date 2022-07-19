@@ -355,6 +355,6 @@ EXPORTED_RUNTIME_METHODS 标识以数组形式记录所有需要被导出的Emsc
 
 <img src='img/emsdk-16.png'>    
 
-想深入了解wasm编译流程的可以啃啃源码：`emsdk\fastcomp\emscripten\tools\shared.py`    
+想深入了解wasm编译流程的可以啃啃源码：`emsdk\upstream\emscripten\tools\shared.py`    
 	
 
