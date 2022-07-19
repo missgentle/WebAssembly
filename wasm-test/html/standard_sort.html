@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>使用标准程序加载Wasm模块</title>
+</head>
+
+<body>
+	<p><span>排序前：</span><span class="aequence-before"></span></p>
+	<p><span>排序后：</span><span class="aequence"></span></p>
+	<script type="text/javascript">
+		// 该方法用于从JS环境向指定的共享堆内存段填充数据
+		function importArrayToBuffer(memory, array, offset) {
+			const importBuffer = new Unit32Array(memory.buffer, offset, array.length);
+			for (let i = 0; i < array.length; i++) {
+				importBuffer[i] = array[i];
+			}
+		}
+
+		// 从远程加载一个Wasm模块，并将该模块中的内容转换成二进制数据
+		let startTime = performance.now();
+		fetch('../out/original.wasm').then(response => response.arrayBuffer()).then((bytes) => {
+			let memory;
+			// 通过浏览器提供的标准WebAssembly接口来编译和初始化一个Wasm模块
+			WebAssembly.compile(bytes).then(module => {
+				// 查看该Wasm模块实例中名为customized的自定义段内容
+				console.log(WebAssembly.Module.customSections(module, 'customized'));
+				// 查看从该Wasm模块实例导出到JS环境中的对象信息
+				console.log(WebAssembly.Module.exports(module));
+				// 查看从JS环境中导入到该Wasm模块实例的对象信息
+				console.log(WebAssembly.Module.imports(module));
+				WebAssembly.instantiate(module, {
+					env: {
+						// 需要导入到模块中的JS函数体
+						print(offset, len) {
+							let strBuffer = new Unit32Array(memory.buffer, offset, len);
+							document.querySelector('.sequence').innerText = JSON.stringify(Object.values(strBuffer));
+						}
+					}
+				})
+			}).then(instance => {
+				// 输出下载，编译及实例化Wasm模块花费的时间
+				console.log(performance.now() - startTime);
+				// 取出从Wasm模块中导出的函数
+				let exports = instance.exports;
+				// 获取该Wasm模块实例使用的堆内存对象
+				memory = exports.menmory;
+				let arr = [];
+				// 生成一个包含是个元素的整形数组
+				for (let i = 0; i < 10; i++) {
+					arr.push(Math.round(Math.random() * 10));
+				}
+
+				document.querySelector('.sequence-before').innerText = JSON.stringify(Object.values(arr));
+				// 将整形数组内的元素依次填充到指定的内存段中，即填充到Wasm模块初始化时生成的数组中
+				importArrayToBuffer(memory, arr, exports.getArrayOffset());
+				// 调用Wasm模块暴露出来的排序方法
+				exports.sort();
+
+			});
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Emscripten - Standalone WebAssembly Module - Dynamic</title>
+</head>
+
+<body>
+	<script type="text/javascript">
+
+		// 远程加载wasm模块
+		fetch('../out/emscripten-standalone-dynamic.wasm').then(
+			response => response.arrayBuffer()
+		).then(bytes =>
+			WebAssembly.compile(bytes)
+		).then(module => {
+			console.log(module);
+			const instance = new WebAssembly.Instance(module)
+			
+			
+			// 从exports对象中获取模块对外暴露出的add方法
+			// const exportFuncAdd = result.exports['add'];
+			// // 调用add方法
+			// let outcome = exportFuncAdd(10, 20);
+			// console.log(outcome);
+		})
+
+		// var importObject = { imports: { imported_func: arg => console.log(arg) } };
+		// WebAssembly.instantiateStreaming(fetch('emscripten-standalone-dynamic.wasm'), importObject).then(obj => obj.instance.exports.exported_func());
+
+	</script>
+</body>
+
+</html>
