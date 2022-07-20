@@ -10,7 +10,7 @@
 Emscripten工具链实现了一套与SDL(Simple DirectMedia Layer，简单直接媒体层)库完全对应的API接口，通过这些接口可以将原本基于SDL开发的应用移植到Web上。
 SDL是一套跨平台的软件开发库，通过它我们可以直接访问计算机底层的音频，键盘，鼠标，游戏遥杆和图像硬件输入输出设备，进而它可以被用于开发高性能视频游戏，游戏开发引擎，以及各类多媒体应用程序。    
 
-除了SDL,Emscripten在emsdk开发工具包中提供了一个html5.h头文件(emsdk\fastcomp\emscripten\system\include\emscripten\html5.h),该头文件定义了一系列可用于在C/C++中处理键盘事件，鼠标事件，设备方位，屏幕触摸和页面可见性等与底层I/O设备相关的交互逻辑接口。    
+除了SDL,Emscripten在emsdk开发工具包中提供了一个html5.h头文件(emsdk\upstream\emscripten\system\include\emscripten\html5.h),该头文件定义了一系列可用于在C/C++中处理键盘事件，鼠标事件，设备方位，屏幕触摸和页面可见性等与底层I/O设备相关的交互逻辑接口。    
 
 此外，Emscripten还对如下几种常见 底层图形设备处理库 提供了对等的web浏览器解决方案：    
 
@@ -120,6 +120,7 @@ void one_iter_render () {
 
 - emscripten_force_exit()：停止并强制退出当前wasm应用。函数调用后会直接触发当前JS运行时环境中的“__ATEXIT__”钩子队列。
 若要在C/C++源代码中使用该函数，则需要在编译时为emcc指定参数“NO_EXIT_RUNTIME=0”，以允许Emscripten运行时环境退出。    
+如果“NO_EXIT_RUNTIME=1”编译器就知道你不想让程序在运行完main函数后就结束。此时，编译器就会放弃atexit和全局析构这两个函数的调用，这样就减小了代码体积，并且加快了启动速度。    
 
 - emscripten_set_main_loop_expected_blockers()：用于向ERE报告预处理函数(emscripten_push_main_loop_blocker)的个数。
 我们可以通过JS运行时环境提供的Module.setStatus回调函数，来实时检测位于执行队列中的预处理函数的总体完成进度，并同步的反馈给用户。    
@@ -132,7 +133,7 @@ void one_iter_render () {
 <img src='../img/wasm-9.png'>    
 <img src='../img/wasm-10.png'>    
 
-更多与浏览器运行环境相关的函数，可查看源码：emsdk\fastcomp\emscripten\system\include\emscripten\emscripten.h，并在官网了解具体使用方法。    
+更多与浏览器运行环境相关的函数，可查看源码：emsdk\upstream\emscripten\system\include\emscripten\emscripten.h，并在官网了解具体使用方法。    
 
 ### Emscripten内存表示    
 
