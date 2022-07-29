@@ -3,6 +3,7 @@
 > 声明在先：本文参考掘金好文 https://juejin.im/entry/5bcd43a5e51d457a502a7554    
 > Github https://github.com/emscripten-core/emscripten/wiki/WebAssembly-Standalone    
 > MDN https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly    
+> 代码示例 https://github.com/missgentle/WebAssembly/tree/master/wasm-test    
 > 代码示例摘自书籍《深入浅出WebAssembly》(于航/著)第五章    
 > 
 > 旧版2019教程在这里https://github.com/missgentle/Q-A/tree/master/Guide/Emscripten    
