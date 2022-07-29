@@ -12,7 +12,7 @@
   - node命令运行js
   `node hello_emscripten.js`
 
-  - 另开一个cmd窗口在当前目录临时启动一个http服务
+  - 在当前目录临时启动一个http服务    
     python2命令:`python -m SimpleHTTPServer 8081`    
     python3命令:`python -m http.server 8081`    
     访问：http://127.0.0.1:8081/hello_emscripten.html    
@@ -22,15 +22,11 @@
   - Standalone类型
 
     -- 使用增强型优化器的方式(Optimizer)
-    `emcc cc/emscripten-standalone.cc -Os -s WASM=1 -o out/emscripten-standalone-optimizer.wasm`
-
-    -- 在当前目录临时启动一个http服务
-    python2命令:`python -m SimpleHTTPServer 8081`
-    python3命令:`python -m http.server 8081`
+    `emcc cc/emscripten-standalone.cc -Os -s WASM=1 -o out/emscripten-standalone-optimizer.wasm --no-entry`
 
     -- http://127.0.0.1:8081/html/index-optimizer.html
 
-    -- 编译成动态库的方式(Dynamic Library)
+    -- 编译成动态库的方式(Dynamic Library 测试失败)
     `emcc cc/emscripten-standalone.cc -s WASM=1 -s SIDE_MODULE=1 -o out/emscripten-standalone-dynamic.wasm`    
 
     -- http://127.0.0.1:8081/html/index-dynamic.html    
