@@ -1,5 +1,3 @@
-> 本文档涉及的所有源代码均摘录自书籍：《深入浅出WebAssembly》，位于 runJSinC/和runCinJS/ 下    
-
 ## 在JS代码中调用C/C++函数(runCinJS)    
 
 在构建WebAssembly应用时，一个最常见的需求就是希望能够在JS中调用C/C++源码中暴露出的函数。我们可以借助ERE内部已经封装好的ccall和swrap实现。
